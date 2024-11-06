@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.3.4/css/jquery.mb.YTPlayer.min.css">
+    <title>GENTLEMONSTER_it</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/youtube-background@1.0.14/jquery.youtube-background.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body{
+            overflow-x: hidden; /* 수평 스크롤바 숨기기 */
+            overflow-y: auto; /* 수직 스크롤 유지 */
+        }
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @media (max-width: 1000px) {
+            #nav{
+                all:unset;
+                display: none;
+            }
+        }
+        
+        @media (min-width: 1000px) {
+            .ss{
+                display: flex; flex-wrap: wrap; justify-content: center;
+            }
+            .main{
+                display: flex; justify-content: center; align-items: center; flex-direction: column;
+            }
+        }
+
+        .vogue{
+            text-transform: uppercase;
+            font-family:Verdana, Geneva, Tahoma, sans-serif helvetica, sans-serif;
+            color: antiquewhite;
+        }
+
+        .bb{
+            font-family: 'GmarketSansMedium';
+        }
+
+        .logo{
+            width: 200px;
+        }
+
+        .story{
+            width: 75px;
+            padding: 5px;
+            display: block;
+            pointer-events : none;
+        }
+        .story2{
+            width: 75px;
+            display: block;
+            background-color: transparent;
+        }
+        .story2:hover{
+            border: 1px solid black;
+            border-radius: 100px;
+        }
+
+        .ss{
+            display: inline-flex;
+            width: max-content;
+            text-align: center;
+            font-family: 'GmarketSansMedium';
+            font-size: 10px;
+            position: absolute;
+        }
+
+        .asdasd{
+            float: right;
+        }
+
+        .aaa{
+            width: max-content;
+        }
+
+        .slide-menu {
+            position: fixed;
+            top: 0;
+            right: -300px; /* 메뉴가 화면 밖에 위치 */
+            width: 300px;
+            height: 100%;
+            z-index: 2000;
+            background-color: white;
+            transition: right 0.5s ease; /* 부드러운 슬라이드 효과 */
+        }
+
+        .slide-menu.active {
+            right: 0; /* 메뉴가 화면에 보이도록 */
+            
+        }
+
+        #toggle-menu{
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0); /* 초기 투명 */
+            transition: background-color 0.3s ease; /* 부드러운 배경 변화 */
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        .overlay.active {
+            display: block; /* 메뉴가 열릴 때 보이도록 */
+            background-color: rgba(0, 0, 0, 0.5); /* 점점 어두워짐 */
+            z-index: 1900;
+
+        }
+        .ss div{
+            margin-right: 5px;
+        }
+
+        .hoverDiv{
+            cursor: pointer;
+        }
+
+        #nav span{
+            cursor: pointer;
+        }
+        
+        #toptitle{
+            position: fixed; /* 화면에 고정 */
+            top: 0; /* 상단에 위치 */
+            left: 0; /* 왼쪽 정렬 */
+            right: 0; /* 오른쪽 정렬 */
+            z-index: 1000; /* 다른 요소 위에 위치하도록 설정 */
+            background-color: white; /* 배경색 설정 */
+        }
+        .main{
+            position: relative; 
+            width: 100%; 
+            height: 200px; 
+            user-select: none;
+            overflow: hidden;
+        }
+        .heart {
+            color: red; /* 하트 색상 */
+            cursor: pointer; /* 마우스 커서 변경 */
+        }
+        .far{
+            color: black;
+        }
+    </style>
+    
+</head>
+<body>
+    <div id="toptitle" class="bg-white fixed text-black p-4 w-full flex items-center justify-between">
+    
+        <div class="flex-1 text-center"> <!-- 1/3 영역 -->
+            <img class="logo" src="./image/Logo_gm.png" alt="로고">
+        </div>
+    
+        <div class="flex-2 text-center text-xs" id="nav"> <!-- 1/3 영역 -->
+            <span class="mx-2">선글라스</span>
+            <span class="mx-2">안경</span>
+            <span class="mx-2">콜라보레이션</span>
+            <span class="mx-2">스타일</span>
+            <span class="mx-2">브랜드이슈</span>
+        </div>
+    
+        <div class="flex-1 text-align"> <!-- 1/3 영역 -->
+            <div class="flex float-right">
+
+                <div class="pr-5 flex items-center" id="shoppingbag">
+                    <img src="./image/shopping.png" style="width: 20px;">
+                </div>
+
+                <div class="pr-5 flex items-center">
+                    <img src="./image/돋보기.png" style="width: 20px;">
+                </div>
+                
+                <div class="text-lg font-bold" id="toggle-menu"> <!-- 기본적으로 보이도록 설정 -->
+                    ⁝
+                </div>
+            </div>
+        </div>
+        
+        <style>
+            
+            #toggle-menu {
+                display: none; /* 기본적으로 숨김 */
+            }
+        
+            @media (max-width: 1000px) {
+                #toggle-menu {
+                    display: flex; /* 화면이 1000px 이하일 때 보이도록 */
+                }
+            }
+        
+            @media (min-width: 1001px) {
+                #toggle-menu {
+                    display: none; /* 화면이 1000px 초과일 때 숨김 */
+                }
+            }
+        </style>
+    
+    </div>
+
+    <div class="overlay" id="overlay"></div> <!-- 어두운 배경 -->
+
+    <div class="slide-menu" id="slide-menu2">
+        <button class="float-right text-black m-10 -5 text-lg" id="close-menu2">X</button>
+        <div class="p-10 pt-20 text-2xl">
+            장바구니
+        </div>
+    </div>
+    
+    <script>
+        const shopping = document.getElementById('shoppingbag');
+        const slideMenu2 = document.getElementById('slide-menu2');
+        const closeMenu2 = document.getElementById('close-menu2');
+
+        shopping.addEventListener('click', () => {
+            if (slideMenu2.classList.contains('active')) {
+                closeMenuFunction2();
+            } else {
+                openMenu2();
+            }
+        });
+
+        function openMenu2() {
+            slideMenu2.classList.add('active'); // 슬라이드 메뉴 열기
+        }
+
+        function closeMenuFunction2() {
+
+            // 점점 밝아지며 닫기
+            setTimeout(() => {
+                slideMenu2.classList.remove('active'); // 슬라이드 메뉴 닫기
+            }, 300); // 슬라이드 메뉴가 닫히는 시간과 동일하게 설정
+        }
+
+        closeMenu2.addEventListener('click', closeMenuFunction2);
+    </script>
+
+    <div class="slide-menu" id="slide-menu">
+        <button class="float-right text-black m-10 -5 text-lg" id="close-menu">X</button>
+        <div class="p-10 pt-20 text-2xl">
+            <div class="pb-5">선글라스</div>
+            <div class="pb-5">안경</div>
+            <div class="pb-5">콜라보레이션</div>
+            <br>
+            <div class="text-lg">스타일</div>
+            <div class="text-lg">브랜드이슈</div>
+            <div class="text-xs mt-20">젠틀몬스터 모작품 노건우</div>
+        </div>
+    </div>
+    
+    <script>
+        const toggleMenu = document.getElementById('toggle-menu');
+        const slideMenu = document.getElementById('slide-menu');
+        const closeMenu = document.getElementById('close-menu');
+        const overlay = document.getElementById('overlay');
+
+        toggleMenu.addEventListener('click', () => {
+            if (slideMenu.classList.contains('active')) {
+                closeMenuFunction();
+            } else {
+                openMenu();
+            }
+        });
+
+        function openMenu() {
+            slideMenu.classList.add('active'); // 슬라이드 메뉴 열기
+            overlay.classList.add('active'); // 어두운 배경 열기
+
+            // 점점 어두워지는 효과
+            setTimeout(() => {
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // 점점 어두워짐
+            }, 10); // 애니메이션 효과를 주기 위한 지연
+        }
+
+        function closeMenuFunction() {
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // 현재 어두운 상태에서 시작
+
+            // 점점 밝아지며 닫기
+            setTimeout(() => {
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0)'; // 다시 투명으로
+                slideMenu.classList.remove('active'); // 슬라이드 메뉴 닫기
+                overlay.classList.remove('active'); // 어두운 배경 닫기
+            }, 300); // 슬라이드 메뉴가 닫히는 시간과 동일하게 설정
+        }
+
+        closeMenu.addEventListener('click', closeMenuFunction);
+        overlay.addEventListener('click', closeMenuFunction);
+    </script>
+
+    
+    <div class="pt-20 px-4 main">
+        <div class="ss" id="draggable">
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/BLANC-G13.png">
+                </div>
+                <p>전체보기</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/dada01 (1).png">
+                </div>
+                <p>베스트셀러</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/DADA-RC6.png">
+                </div>
+                
+                <p>선물추천</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/TTL_01.png">
+                </div>
+                
+                <p>틴트프레임</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/NUBO_01.png">
+                </div>
+                
+                <p>사각프레임</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/LIMITLESS.png">
+                </div>
+                
+                <p>고글형프레임</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/ROCOCO_01.png">
+                </div>
+                
+                <p>켓아이프레임</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/VOID-G122.png">
+                </div>
+                
+                <p>타원형프레임</p>
+            </div>
+            <div class="draggable">
+                <div class="story2">
+                    <img class="rounded-full story" src="./image/nav/LA_MODE_W2.png">
+                </div>
+                
+                <p>원형프레임</p>
+            </div>
+        </div>
+
+        <script>
+            const ssElement = document.querySelector('.ss'); // ss 요소 선택
+            const mainContainer = document.querySelector('.main'); // main 요소 선택
+            let isDragging = false; // 드래그 상태
+            let offset = { x: 0 }; // 오프셋 초기화
+        
+            // 드래그 시작
+            const startDrag = (e) => {
+                // 페이지 너비가 1000px보다 작을 때만 드래그 시작
+                if (window.innerWidth < 1000) {
+                    isDragging = true;
+                    offset.x = (e.touches ? e.touches[0].clientX : e.clientX) - ssElement.getBoundingClientRect().left; // 마우스와 ss 요소의 좌표 차이
+                    ssElement.style.cursor = 'grabbing'; // 드래그 중 커서 변경
+                }
+            };
+        
+            // 드래그 중
+            const drag = (e) => {
+                if (isDragging) {
+                    const x = (e.touches ? e.touches[0].clientX : e.clientX) - offset.x; // 현재 마우스 위치에서 오프셋을 빼서 새로운 X 좌표 계산
+                    ssElement.style.transform = `translateX(${x}px)`; // 좌우 이동만 적용
+                }
+            };
+        
+            // 드래그 종료
+            const endDrag = () => {
+                if (isDragging) {
+                    isDragging = false;
+                    ssElement.style.cursor = 'grab'; // 드래그 해제 시 커서 변경
+        
+                    // 현재 위치 계산
+                    const ssRect = ssElement.getBoundingClientRect();
+                    const mainRect = mainContainer.getBoundingClientRect();
+        
+                    // 왼쪽 경계는 200px 더 멀리, 오른쪽 경계는 그대로 체크
+                    const leftBoundary = mainRect.left - 600; // 왼쪽 경계를 200px 더 멀리 설정
+                    const rightBoundary = mainRect.right; // 오른쪽 경계를 200px 더 멀리 설정
+        
+                    // 경계를 넘어가면 원점으로 돌아가기
+                    if (ssRect.left < leftBoundary || ssRect.right > rightBoundary) {
+                        // 원점으로 돌아가기 (여기서 오프셋 추가)
+                        const offsetX = 0; // 원점으로 돌아갈 때 오른쪽으로 이동할 거리
+                        ssElement.style.transition = 'transform 0.3s ease'; // 이동 애니메이션 추가
+                        ssElement.style.transform = `translateX(${offsetX}px)`; // 초기 위치에서 offsetX만큼 이동
+        
+                        // 애니메이션 종료 후 transition 속성 제거
+                        setTimeout(() => {
+                            ssElement.style.transition = '';
+                        }, 300);
+                    } else {
+                        // 경계를 넘어가지 않으면 현재 위치 유지
+                        const currentTranslate = ssElement.style.transform.match(/translateX\(([^)]+)\)/);
+                        const currentX = currentTranslate ? currentTranslate[1] : '0px';
+                        ssElement.style.transform = `translateX(${currentX})`; // 현재 위치 유지
+                    }
+                }
+            };
+        
+            // 마우스 및 터치 이벤트 등록
+            ssElement.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+        
+            ssElement.addEventListener('touchstart', startDrag);
+            ssElement.addEventListener('touchmove', drag);
+            ssElement.addEventListener('touchend', endDrag);
+        
+            // 리사이즈 이벤트 핸들러 (페이지 크기 변화에 따라 드래그를 비활성화)
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1000) {
+                    ssElement.style.transform = `translateX(0px)`; // 초기 위치로 돌아가기
+                    isDragging = false; // 드래그 비활성화
+                }
+            });
+        
+            // 페이지 로드 시 드래그 가능한 요소 보이기
+            window.onload = function() {
+                const draggables = document.querySelectorAll('.draggable');
+                draggables.forEach((draggable, index) => {
+                    setTimeout(() => {
+                        draggable.classList.add('visible');
+                    }, index * 100); // 각 요소가 순차적으로 보이도록 설정
+                });
+            };
+        </script>
+    </div>
+
+    <div class="pt-10 pl-5 pr-5 pb-5">
+
+        <div class="font-size-100 font-bold bb">
+            <span>선글라스 / 전체보기 (12)</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 bb text-xs">
+
+            <div>
+                <img src="./image/item/ATEMPO_G12.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>ATEMPO_G12</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+
+            <div>
+                <img src="./image/item/BY_01OR.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>BY_01OR</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/CUFF_01.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>CUFF_01</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/dada rc6.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>DADA RC6</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/JADE_G1.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>JADE_G1</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/LIN_W2.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>LIN_W2</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/PINO_01.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>PINO_01</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/ROW_W2.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>ROW_W2</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/TTL_02BRG.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>TTL_02BRG</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/VENOM-01.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>VENOM-01</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/VOID-G12.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>VOID-G12</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+            <div>
+                <img src="./image/item/ROW_Y9avif.png">
+                <br>
+                <div class="hoverDiv" style="float: right;">
+                    <i id="heartIcon" class="far fa-heart heart"></i>
+                </div>
+
+                <span>ROW_Y9</span>
+                <br>
+                <span>345,000원</span>
+            </div>
+
+            <script>
+                const hearts = document.querySelectorAll('.heart');
+
+                hearts.forEach(heart => {
+                    heart.addEventListener('click', () => {
+                        // 클릭된 하트의 상태를 토글
+                        if (heart.classList.contains('far')) {
+                            heart.classList.remove('far');
+                            heart.classList.add('fas');
+                        } else {
+                            heart.classList.remove('fas');
+                            heart.classList.add('far');
+                        }
+                    });
+                });
+            </script>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+</html>
